@@ -1,0 +1,43 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")   // For general Prisma operations
+  directUrl = env("DIRECT_URL")     // Direct URL for migrations/seeding
+}
+
+enum Role {
+  SELLER
+  BUYER
+}
+
+model User {
+  id        Int          @id @default(autoincrement())
+  email     String       @unique
+  name      String?
+  role      Role
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @default(now()) @map("updated_at")
+
+  // Relations
+  soldAppointments   Appointment[] @relation("SellerAppointments")
+  boughtAppointments Appointment[] @relation("BuyerAppointments")
+}
+
+model Appointment {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  start     DateTime
+  end       DateTime @map("end")
+  sellerId  Int
+  buyerId   Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  // Relations
+  seller User @relation("SellerAppointments", fields: [sellerId], references: [id])
+  buyer  User @relation("BuyerAppointments", fields: [buyerId], references: [id])
+}
