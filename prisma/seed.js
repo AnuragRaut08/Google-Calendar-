@@ -10,7 +10,7 @@ async function main() {
     create: {
       email: "seller@example.com",
       name: "Alice Seller",
-      role: "SELLER",
+      role: "SELLER", 
     },
   });
 
