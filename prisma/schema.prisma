@@ -39,5 +39,5 @@ model Appointment {
 
   // Relations
   seller User @relation("SellerAppointments", fields: [sellerId], references: [id])
-  buyer  User @relation("BuyerAppointments", fields: [buyerId], references: [id])
+  buyer  User @relation("BuyerAppointments", fields: [buyerId], references: [id]) 
 }
